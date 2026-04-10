@@ -90,11 +90,6 @@ public class RegisterPage extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //if session exist use it, otherwise create a new one
         HttpSession session = req.getSession();
-        System.out.println("session.getAttribute(\"SESSION_ID\"): " + session.getAttribute("SESSION_ID"));
-        if(session.getAttribute("SESSION_ID") == null){
-            req.getSession().invalidate();
-            resp.sendRedirect("./login");
-        }
 
         List<Person> personsRegister;
         if (session.getAttribute("PERSONS_DB") == null)
@@ -105,63 +100,8 @@ public class RegisterPage extends HttpServlet {
         personsRegister.add(new Person(req.getParameter("name"),
             req.getParameter("nationalId")));
 
-        PrintWriter writer = resp.getWriter();
-
-        writer.println("<!DOCTYPE html>");
-        writer.println("<html>");
-        writer.println("<head>");
-        writer.println("<title>About Us - Training Academy</title>");
-        writer.println("<style>");
-        writer.println("body { font-family: Arial; margin: 40px; background-color: #f4f6f8; }");
-        writer.println("header { background-color: #2c3e50; color: white; padding: 15px; }");
-        writer.println("section { margin-top: 20px; padding: 15px; background: white; border-radius: 5px; }");
-        writer.println("a { color: #3498db; text-decoration: none; font-weight: bold; }");
-        writer.println("</style>");
-        writer.println("</head>");
-
-        writer.println("<body>");
-
-// Header
-        writer.println("<header>");
-        writer.println("<h1>About COHORT 12 Training PORTA</h1>");
-        writer.println("</header>");
-
-// Who we are
-        writer.println("<section>");
-        writer.println("<h2>Student Registered</h2>");
-        writer.println("<p>");
-
-        writer.println("<table style='border-collapse: collapse; width: 50%; font-family: Arial, sans-serif;'>");
-
-        // Header row
-        writer.println("<tr>");
-        writer.println("<th style='border: 1px solid #000; padding: 8px; background-color: #f2f2f2;'>ID</th>");
-        writer.println("<th style='border: 1px solid #000; padding: 8px; background-color: #f2f2f2;'>Name</th>");
-        writer.println("</tr>");
-
-        for (Person person : personsRegister) {
-            writer.println("<tr>");
-            writer.println("<td style='border: 1px solid #000; padding: 8px;'>" + person.getNationalId() + "</td>");
-            writer.println("<td style='border: 1px solid #000; padding: 8px;'>" + person.getName() + "</td>");
-            writer.println("</tr>");
-        }
-
-        writer.println("</table>");
-
         session.setAttribute("PERSONS_DB", personsRegister);
 
-        RequestDispatcher dispatcher = req.getRequestDispatcher("footer");
-        dispatcher.include(req, resp);
-        writer.println("</p>");
-        writer.println("</section>");
-
-// Navigation
-        writer.println("<section>");
-        writer.println("<a href=\"./register\">&larr; Register Another Student OR </a>");
-        writer.println("</section>");
-
-        writer.println("</body>");
-        writer.println("</html>");
-
+        resp.sendRedirect("./list_registered");
     }
 }

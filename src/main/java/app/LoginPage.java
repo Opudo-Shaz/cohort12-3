@@ -101,7 +101,7 @@ public class LoginPage extends HttpServlet {
             System.out.println("session.getId(): " + session.getId());
             session.setAttribute("SESSION_ID", session.getId());
 
-            response.sendRedirect("./register");
+            response.sendRedirect("./list_registered");
 
         } else {
             request.getSession().invalidate();

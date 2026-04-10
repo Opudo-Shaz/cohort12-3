@@ -19,11 +19,6 @@ public class WelcomePage implements Servlet {
     }
 
     public void service(ServletRequest servletRequest, ServletResponse servletResponse) throws ServletException, IOException {
-        HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
-        HttpSession session = httpRequest.getSession(false); //dont create new session
-        if (session != null)
-            session.invalidate();
-
         servletResponse.setContentType("text/html");
         PrintWriter writer = servletResponse.getWriter();
 

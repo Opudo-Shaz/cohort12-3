@@ -38,11 +38,20 @@
       <param-value>Training Registration - IT</param-value>
     </init-param>
   </servlet>
-
   <servlet-mapping>
     <servlet-name>Register</servlet-name>
     <url-pattern>/register</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ListRegistered</servlet-name>
+    <servlet-class>app.ListRegisteredPage</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ListRegistered</servlet-name>
+    <url-pattern>/list_registered</url-pattern>
+  </servlet-mapping>
+
   <servlet>
     <servlet-name>Footer</servlet-name>
     <servlet-class>app.FooterPage</servlet-class>
@@ -65,6 +74,14 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Login</servlet-name>
-    <url-pattern>/login</url-pattern>
+      <url-pattern>/login</url-pattern>
   </servlet-mapping>
+  <filter>
+    <filter-name>LogInFilter</filter-name>
+    <filter-class>app.LoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>LogInFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 </web-app>
