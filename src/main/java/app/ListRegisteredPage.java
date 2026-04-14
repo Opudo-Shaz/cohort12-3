@@ -22,11 +22,11 @@ public class ListRegisteredPage extends HttpServlet {
         //if session exist use it, otherwise create a new one
         HttpSession session = req.getSession();
 
-        List<Person> personsRegister;
+        List<School> register;
         if (session.getAttribute("PERSONS_DB") == null)
-            personsRegister = new ArrayList<>();
+            register = new ArrayList<>();
         else
-            personsRegister = (List<Person>) session.getAttribute("PERSONS_DB");
+            register = (List<School>) session.getAttribute("PERSONS_DB");
 
         PrintWriter writer = resp.getWriter();
 
@@ -49,53 +49,7 @@ public class ListRegisteredPage extends HttpServlet {
         writer.println("<h1>About COHORT 12 Training PORTA</h1>");
         writer.println("</header>");
 
-// Who we are
-        writer.println("<section>");
-        writer.println("<h2>Student Registered</h2>");
-        writer.println("<p>");
-
-        writer.println("<table style='border-collapse: collapse; width: 50%; font-family: Arial, sans-serif;'>");
-
-        Class personClazz = Person.class;
-
-        List<String> fieldNames = new ArrayList<>();
-        for (Field field : personClazz.getDeclaredFields()) {
-            fieldNames.add(field.getName());
-        }
-
-        writer.println("<tr>");
-        for (String fieldName : fieldNames) {
-            // Header row
-            writer.println("<th style='border: 1px solid #000; padding: 8px; background-color: #f2f2f2;'>" + fieldName + "</th>");
-        }
-        writer.println("</tr>");
-
-
-        for (Person person : personsRegister) {
-            writer.println("<tr>");
-            for (String fieldName : fieldNames) {
-                try {
-                    Field field = person.getClass().getDeclaredField(fieldName);
-                    field.setAccessible(true);
-                    writer.println("<td style='border: 1px solid #000; padding: 8px;'>"
-                            + field.get(person) + "</td>");
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-            }
-            writer.println("</tr>");
-        }
-
-        writer.println("</table>");
-
-        writer.println("</p>");
-        writer.println("</section>");
-
-// Navigation
-        writer.println("<section>");
-        writer.println("<a href=\"./register\">&larr; Register Student </a>");
-        writer.println("</section>");
+        Cohort12Framework.htmlTable(writer, School.class, register);
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("footer");
         dispatcher.include(req, resp);

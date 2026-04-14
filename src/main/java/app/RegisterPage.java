@@ -71,21 +71,7 @@ public class RegisterPage extends HttpServlet {
 
 // Form
         writer.println("<section>");
-        writer.println("<h2>Register for a Course</h2>");
-
-        writer.println("<form method='post' action='./register'>");
-
-        Class formClazz = Person.class;
-
-        for (Field field : formClazz.getDeclaredFields()) {
-            writer.println("<label>" + field.getName() + ":</label>");
-            writer.println("<input type='text' name='" + field.getName() + "' placeholder='Enter " + field.getName() + "' required />");
-        }
-
-// Submit button
-        writer.println("<button type='submit'>Register</button>");
-
-        writer.println("</form>");
+        Cohort12Framework.htmlForm(writer, School.class);
         writer.println("</section>");
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("footer");
@@ -101,24 +87,24 @@ public class RegisterPage extends HttpServlet {
         //if session exist use it, otherwise create a new one
         HttpSession session = req.getSession();
 
-        List<Person> personsRegister;
+        List<School> register;
         if (session.getAttribute("PERSONS_DB") == null)
-            personsRegister = new ArrayList<>();
+            register = new ArrayList<>();
         else
-            personsRegister = (List<Person>) session.getAttribute("PERSONS_DB");
+            register = (List<School>) session.getAttribute("PERSONS_DB");
 
-        Person person = new Person();
+        School school = new School();
         try {
-            BeanUtils.populate(person, req.getParameterMap());
+            BeanUtils.populate(school, req.getParameterMap());
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         }
 
-        personsRegister.add(person);
+        register.add(school);
 
-        session.setAttribute("PERSONS_DB", personsRegister);
+        session.setAttribute("PERSONS_DB", register);
 
         resp.sendRedirect("./list_registered");
     }
