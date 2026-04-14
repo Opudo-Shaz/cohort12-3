@@ -10,9 +10,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.commons.beanutils.BeanUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -72,13 +75,12 @@ public class RegisterPage extends HttpServlet {
 
         writer.println("<form method='post' action='./register'>");
 
-// Name
-        writer.println("<label>Full Name:</label>");
-        writer.println("<input type='text' name='name' placeholder='Enter your full name' required />");
+        Class formClazz = Person.class;
 
-// National ID
-        writer.println("<label>National ID:</label>");
-        writer.println("<input type='text' name='nationalId' placeholder='Enter your ID number' required />");
+        for (Field field : formClazz.getDeclaredFields()) {
+            writer.println("<label>" + field.getName() + ":</label>");
+            writer.println("<input type='text' name='" + field.getName() + "' placeholder='Enter " + field.getName() + "' required />");
+        }
 
 // Submit button
         writer.println("<button type='submit'>Register</button>");
@@ -101,12 +103,20 @@ public class RegisterPage extends HttpServlet {
 
         List<Person> personsRegister;
         if (session.getAttribute("PERSONS_DB") == null)
-            personsRegister = new ArrayList<Person>();
+            personsRegister = new ArrayList<>();
         else
             personsRegister = (List<Person>) session.getAttribute("PERSONS_DB");
 
-        personsRegister.add(new Person(req.getParameter("name"),
-            req.getParameter("nationalId")));
+        Person person = new Person();
+        try {
+            BeanUtils.populate(person, req.getParameterMap());
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+
+        personsRegister.add(person);
 
         session.setAttribute("PERSONS_DB", personsRegister);
 

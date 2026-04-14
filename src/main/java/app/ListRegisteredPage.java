@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class ListRegisteredPage extends HttpServlet {
 
         List<Person> personsRegister;
         if (session.getAttribute("PERSONS_DB") == null)
-            personsRegister = new ArrayList<Person>();
+            personsRegister = new ArrayList<>();
         else
             personsRegister = (List<Person>) session.getAttribute("PERSONS_DB");
 
@@ -55,16 +56,34 @@ public class ListRegisteredPage extends HttpServlet {
 
         writer.println("<table style='border-collapse: collapse; width: 50%; font-family: Arial, sans-serif;'>");
 
-        // Header row
+        Class personClazz = Person.class;
+
+        List<String> fieldNames = new ArrayList<>();
+        for (Field field : personClazz.getDeclaredFields()) {
+            fieldNames.add(field.getName());
+        }
+
         writer.println("<tr>");
-        writer.println("<th style='border: 1px solid #000; padding: 8px; background-color: #f2f2f2;'>ID</th>");
-        writer.println("<th style='border: 1px solid #000; padding: 8px; background-color: #f2f2f2;'>Name</th>");
+        for (String fieldName : fieldNames) {
+            // Header row
+            writer.println("<th style='border: 1px solid #000; padding: 8px; background-color: #f2f2f2;'>" + fieldName + "</th>");
+        }
         writer.println("</tr>");
+
 
         for (Person person : personsRegister) {
             writer.println("<tr>");
-            writer.println("<td style='border: 1px solid #000; padding: 8px;'>" + person.getNationalId() + "</td>");
-            writer.println("<td style='border: 1px solid #000; padding: 8px;'>" + person.getName() + "</td>");
+            for (String fieldName : fieldNames) {
+                try {
+                    Field field = person.getClass().getDeclaredField(fieldName);
+                    field.setAccessible(true);
+                    writer.println("<td style='border: 1px solid #000; padding: 8px;'>"
+                            + field.get(person) + "</td>");
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
             writer.println("</tr>");
         }
 
