@@ -130,8 +130,24 @@ j) Jsp -  write java inside html
             >= and ge
             <= and le
 
-    JSTL
+    JSTL - JSP Standard Tag Library
+        collection of ready-made tags..that
+        replaces scriptlets, makes jsp cleaner, readable
+        Library
+            1. Core - Logic, Loops, Variables -- prefix c
+            2. Formatting - format dates, numbers etc fmt
+            3. Functions - prebuilt function..methods fn
 
+
+            4. SQL prefix - sql
+            5. XML prefix - x
+
+        Core Library
+            <c:out> - output data
+            <c:set> - set variable
+            <c:if>
+            <c:choose>
+            <c:forEach>
 
 
 Convert Db session to RDBMS (MYSQL, POSTGRES..ORACLE)
@@ -143,6 +159,7 @@ on startup
 
 
 CONTEXT DEPENDENCY INJECTION(CDI)
+EJB
 JPA & JTA (INCLUDE BEAN VALIDATION)
 WEB SERVICES
     -JAX-RS - REST

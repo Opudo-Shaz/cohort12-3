@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="app.utility.Courses" %>
 <%@ page import="java.time.LocalTime" %>
 
@@ -35,38 +37,24 @@
 <body>
 
     <%-- Header --%>
+    <jsp:useBean id="now" class="java.util.Date" />
+    <fmt:formatDate value="${now}" pattern = "H" var = "hour" />
+
     <header>
         <h1>
-        <%
-            LocalTime now = LocalTime.now();
-            int hour = now.getHour();
-
-            if (hour < 12){
-        %>
-        Good Morning<br/>
-        <%
-            } else {
-        %>
-        Good Afternoon<br/>
-        <%
-            }
-        %>
+        <c:choose>
+            <c:when test="${hour < 12}">
+                Good Morning!! Welcome to our portal: Hour <c:out value="${hour}"/><br/>
+            </c:when>
+            <c:when test="${hour > 17}">
+                Good Evening!! Welcome to our portal: Hour <c:out value="${hour}"/><br/>
+            </c:when>
+            <c:otherwise>
+                Good Afternoon!! Welcome to our portal<br/>
+            </c:otherwise>
+        </c:choose>
         Welcome to ${applicationScope.applicationName} Training PORTAL</h1>
-        <p>Empowering Developers with Real-World Skills</p>
-        SUM OF TWO NUMBER ${1+2}
-        <%!
-
-            public int addTotalSum(){
-                int totalSum = 0;
-                for (int x = 0; x< 20; x++)
-                    totalSum += x;
-
-                return totalSum;
-            }
-        %>
-        <p>
-        <%= addTotalSum() %>
-        </p>
+        <c:out value="<p>Empowering Developers with Real-World Skills</p>" escapeXml="false"/>
     </header>
 
     <%-- Courses section --%>
@@ -84,12 +72,13 @@
             String [] aboutInfos = {
                 "<p>Our training programs focus on hands-on experience and real-world projects.</p>",
                 "<p>We help developers build strong backend systems using modern technologies.</p>",
-                "<p>Mentorship and practical coding sessions are at the core of our learning approach.</p>"};
-
-            for (String aboutInfo: aboutInfos)
-                out.print(aboutInfo);
-
+                "<p>Mentorship and practical coding sessions are at the core of our learning approach.</p>"
+            };
+            request.setAttribute("aboutInfos", aboutInfos);
         %>
+        <c:forEach var="aboutInfo" items="${aboutInfos}">
+            <p>${aboutInfo}</p>
+        </c:forEach>
 
     </section>
 

@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,7 +62,7 @@
     <h1>Thank You!</h1>
         Name: ${param.name}<br/>
         Email: ${param.email}<br/>
-        Subject: ${param.subject}<br/>
+        Subject: <c:out value="${param.subject}" default="No Subject"/><br/>
         Message: ${param.message}<br/>
     <p>Your message has been successfully submitted. We will get back to you shortly.</p>
 
