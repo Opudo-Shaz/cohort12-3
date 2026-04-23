@@ -1,6 +1,7 @@
 package app.utility.helper;
 
 import app.framework.DbTable;
+import app.framework.PageMenuItem;
 import org.reflections.Reflections;
 
 import java.util.HashSet;
@@ -25,7 +26,7 @@ public class ClassScanner {
         Reflections reflections = new Reflections(basePackage);
 
         Set<Class<?>> annotatedClasses =
-                reflections.getTypesAnnotatedWith(DbTable.class);
+                reflections.getTypesAnnotatedWith(PageMenuItem.class);
 
         return new HashSet<>(annotatedClasses);
     }

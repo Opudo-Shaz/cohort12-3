@@ -11,7 +11,7 @@ public class DataSourceHelper {
 
     private static final String HOST = "localhost";
     private static final int PORT = 3306;
-    private static final String DB_NAME = "training_db";
+    private static final String DB_NAME = "training_app";
     private static final String USER = "root";
     private static final String PASSWORD = "";
 
