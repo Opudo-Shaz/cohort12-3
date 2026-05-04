@@ -6,6 +6,7 @@ import app.model.Course;
 import app.utility.validation.Validate;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
+import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -14,8 +15,8 @@ import java.util.List;
 @Stateless
 public class CourseBean {
 
-    @EJB
-    private AuditTrailBean auditTrailBean;
+    @Inject
+    private Event<AuditTrail> auditTrailEvent;
 
     @Inject
     private CourseDao courseDao;
@@ -29,7 +30,7 @@ public class CourseBean {
     public boolean save(Course course){
         System.out.println("Saving course through EJB save");
         if (validate.process(course)) {
-            auditTrailBean.save(new AuditTrail("Creating course: "
+            auditTrailEvent.fire(new AuditTrail("Creating course: "
                 + course.getName()));
             courseDao.save(course);
             return true;

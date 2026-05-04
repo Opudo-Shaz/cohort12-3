@@ -7,6 +7,7 @@ import app.utility.validation.Validate;
 import app.utility.validation.ValidatorQualifier;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
+import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
 import java.util.List;
@@ -14,8 +15,9 @@ import java.util.List;
 @Stateless
 public class SchoolBean {
 
-    @EJB
-    private AuditTrailBean auditTrailBean;
+
+    @Inject
+    private Event<AuditTrail> auditTrailEvent;
 
     @Inject
     private SchoolDao schoolDao;
@@ -26,7 +28,7 @@ public class SchoolBean {
 
     public boolean save(School school){
         if (validate.process(school)) {
-            auditTrailBean.save(new AuditTrail("Creating school: "
+            auditTrailEvent.fire(new AuditTrail("Creating school: "
                 + school.getSchoolName()));
             schoolDao.save(school);
             return true;
