@@ -1,10 +1,10 @@
 package app.bean;
 
 import app.dao.CourseDao;
+import app.dao.SchoolDao;
 import app.model.AuditTrail;
 import app.model.Course;
 import app.utility.validation.Validate;
-import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -25,10 +25,7 @@ public class CourseBean {
     @Named("ValidCourse")
     public Validate<Course> validate;
 
-    private int numberOfTimesCalled = 1;
-
     public boolean save(Course course){
-        System.out.println("Saving course through EJB save");
         if (validate.process(course)) {
             auditTrailEvent.fire(new AuditTrail("Creating course: "
                 + course.getName()));
@@ -36,21 +33,20 @@ public class CourseBean {
             return true;
         }
 
-        System.out.println("********* " + numberOfTimesCalled);
+        return false;
+    }
 
-        numberOfTimesCalled++;
+    public boolean delete(Integer id){
+        if (id > 0 ) {
+            auditTrailEvent.fire(new AuditTrail("Course Deleted, ID: " + id));
+            courseDao.delete(id);
+            return true;
+        }
 
         return false;
     }
 
     public List<Course> list(Course filter){
-        System.out.println("Fetching course through EJB list");
-
-
-        System.out.println("********* " + numberOfTimesCalled);
-
-        numberOfTimesCalled++;
-
         return courseDao.findAll();
     }
 
